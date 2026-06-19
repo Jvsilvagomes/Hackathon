@@ -1,0 +1,8 @@
+[
+  { "id": "1", "grupo": "A", "selecao": "Brasil", "bandeira": "https://flagcdn.com/w320/br.png" },
+  { "id": "2", "grupo": "A", "selecao": "França", "bandeira": "https://flagcdn.com/w320/fr.png" },
+  { "id": "3", "grupo": "B", "selecao": "Argentina", "bandeira": "https://flagcdn.com/w320/ar.png" },
+  { "id": "4", "grupo": "B", "selecao": "Japão", "bandeira": "https://flagcdn.com/w320/jp.png" },
+  { "id": "5", "grupo": "C", "selecao": "Espanha", "bandeira": "https://flagcdn.com/w320/es.png" },
+  { "id": "6", "grupo": "C", "selecao": "Marrocos", "bandeira": "https://flagcdn.com/w320/ma.png" }
+]
