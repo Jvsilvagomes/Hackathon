@@ -1,141 +1,113 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  FlatList, 
-  Image, 
-  TouchableOpacity, 
-  Alert, 
-  SafeAreaView,
-  ActivityIndicator 
-} from 'react';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  Button,
+} from "react-native";
 
 export default function App() {
   const [selecoes, setSelecoes] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-
-  const URL_API = "https://raw.githubusercontent.com/Jvsilvagomes/SEU_REPOSITORIO/main/db.json";
 
   useEffect(() => {
-    fetch(URL_API)
-      .then((resposta) => resposta.json())
-      .then((dados) => {
-        setSelecoes(dados);
-        setCarregando(false);
-      })
-      .catch((erro) => {
-        console.error("Erro ao buscar dados:", erro);
-        setCarregando(false);
-      });
+    fetch("https://raw.githubusercontent.com/Jvsilvagomes/hackathon/refs/heads/main/hackton/db.json")
+      .then((response) => response.json())
+      .then((data) => setSelecoes(data))
+      .catch((error) => console.log(error));
   }, []);
 
-  const lidarComAposta = (nomeSelecao) => {
-    Alert.alert("Aposta Confirmada! ⚽", `Você apostou no ${nomeSelecao}!`);
-  };
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <Image
+        source={{ uri: item.bandeira }}
+        style={styles.bandeira}
+      />
 
-  const renderizarCard = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.card} 
-      onPress={() => lidarComAposta(item.selecao)}
-    >
-      <Image source={{ uri: item.bandeira }} style={styles.bandeira} />
-      
-      <View style={styles.infoContainer}>
-        <Text style={styles.nomePais}>{item.selecao}</Text>
-        <Text style={styles.grupoText}>Grupo {item.grupo}</Text>
+      <Text style={styles.grupo}>
+        Grupo {item.grupo}
+      </Text>
+
+      <Text style={styles.nome}>
+        {item.selecao}
+      </Text>
+
+      <View style={styles.botao}>
+        <Button
+          title="Apostar"
+          onPress={() =>
+            alert(`Aposta registrada!\nVocê apostou no ${item.selecao}!`)
+          }
+        />
       </View>
-    </TouchableOpacity>
+    </View>
   );
 
-  if (carregando) {
-    return (
-      <View style={styles.containerCentralizado}>
-        <ActivityIndicator size="large" color="#007bff" />
-        <Text style={styles.loadingText}>Carregando Seleções...</Text>
-      </View>
-    );
-  }
-
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.titulo}>🏆 Dashboard da Copa 2026</Text>
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
+        Dashboard da Copa 2026
+      </Text>
 
       <FlatList
         data={selecoes}
         keyExtractor={(item) => item.id}
-        renderItem={renderizarCard}
-        numColumns={2} 
-        contentContainerStyle={styles.listaConteudo}
+        renderItem={renderItem}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6f9',
+    backgroundColor: "#f4f4f4",
+    paddingTop: 50,
+    paddingHorizontal: 10,
   },
-  containerCentralizado: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f4f6f9',
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#555',
-  },
-  header: {
-    backgroundColor: '#0e1e38',
-    padding: 20,
-    alignItems: 'center',
-    borderBottomWidth: 3,
-    borderBottomColor: '#f1c40f',
-  },
+
   titulo: {
-    color: '#fff',
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#006847",
   },
-  listaConteudo: {
-    padding: 10,
-  },
+
   card: {
-    backgroundColor: '#fff',
     flex: 1,
+    backgroundColor: "#fff",
     margin: 8,
+    padding: 15,
     borderRadius: 12,
-    overflow: 'hidden', 
+    alignItems: "center",
     elevation: 3,
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    alignItems: 'center',
   },
+
   bandeira: {
-    width: '100%',
-    height: 90,
-    resizeMode: 'cover',
+    width: 80,
+    height: 50,
+    resizeMode: "contain",
+    marginBottom: 10,
   },
-  infoContainer: {
-    padding: 12,
-    alignItems: 'center',
+
+  grupo: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 5,
   },
-  nomePais: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+
+  nome: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
   },
-  grupoText: {
-    fontSize: 13,
-    color: '#777',
-    fontWeight: '600',
+
+  botao: {
+    width: "100%",
   },
 });
